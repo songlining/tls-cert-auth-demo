@@ -1,0 +1,15 @@
+# Vault files
+.vault-token
+.vault-unseal-key
+
+# TLS certificates and keys
+*.crt
+*.key
+*.csr
+*.pem
+
+# Vault license
+*.hclic
+
+# TLS directory
+tls/

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  vault:
+    image: hashicorp/vault-enterprise:latest
+    container_name: vault-demo
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_LICENSE_PATH: /vault/license/vault.hclic
+      VAULT_ADDR: https://127.0.0.1:8200
+      VAULT_CACERT: /vault/config/tls/vault.crt
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./vault.hclic:/vault/license/vault.hclic:ro
+      - ./vault-config.hcl:/vault/config/vault.hcl:ro
+      - ./tls:/vault/config/tls:ro
+      - vault-data:/vault/data
+      - vault-logs:/vault/logs
+    command: vault server -config=/vault/config/vault.hcl
+    healthcheck:
+      test: ["CMD", "vault", "status", "-ca-cert=/vault/config/tls/vault.crt"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  vault-data:
+  vault-logs:
